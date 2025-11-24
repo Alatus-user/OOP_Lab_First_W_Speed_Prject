@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class Item : MonoBehaviour
 {
 
-    [field: SerializeField] public int ItemValue { get; set; }
+    [field: SerializeField] public int itemValue;
 
     void Start()
     {

@@ -6,7 +6,7 @@ public class Hearth : Item
     {
         if (player)
         {
-            player.Heal(ItemValue);
+            player.Heal(itemValue);
             Destroy(gameObject);
         }
     }

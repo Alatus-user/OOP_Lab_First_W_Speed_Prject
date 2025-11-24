@@ -1,13 +1,36 @@
 using UnityEngine;
-
+public enum CoinSize
+{
+    Small, //0
+    Medium, //1
+    Large //2
+}
 public class Coin : Item
 {
+    public CoinSize coinSize { get; private set; }
+
+    public void init(CoinSize size)
+    {
+        switch(size)
+        {
+            case CoinSize.Small:
+                itemValue = 1;
+                break;
+            case CoinSize.Medium:
+                itemValue = 3;
+                break;
+            case CoinSize.Large:
+                itemValue = 5;
+                break;
+        }
+    }
+
     public override void Use(CharacterMovement player)
     {
         {
             if (player)
             {
-                player.AddCoin(ItemValue);
+                player.AddCoin(itemValue);
                 Destroy(gameObject);
             }
         }
