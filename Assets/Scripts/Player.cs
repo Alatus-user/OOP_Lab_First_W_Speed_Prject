@@ -26,17 +26,9 @@ public class CharacterMovement : MonoBehaviour
     void Update()
     {
         float moveInput = 0f;
+        // Move forward continuously
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
 
-        // �Թ���´��� A
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveInput = -1f;
-        }
-        // �Թ��Ҵ��� D
-        else if (Input.GetKey(KeyCode.D))
-        {
-            moveInput = 1f;
-        }
 
         // ���������ǡ������͹���
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
