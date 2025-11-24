@@ -4,13 +4,19 @@ public class CharacterMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 7f;
+    public float maxSpeed;
 
     [field: SerializeField]public int Coin {  get;  set; } = 0;
     [field: SerializeField]public int Health { get; set; } = 10;
 
 
-
+    Animator anim;
     private Rigidbody2D rb;
+
+    public bool grounded = false;
+    public Transform groundCheck;
+    float groundRadius = 0.2f;
+    public LayerMask whatIsGround;
 
     void Start()
     {
@@ -21,28 +27,41 @@ public class CharacterMovement : MonoBehaviour
     {
         float moveInput = 0f;
 
-        // à´Ô¹«éÒÂ´éÇÂ A
+        // ï¿½Ô¹ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½ A
         if (Input.GetKey(KeyCode.A))
         {
             moveInput = -1f;
         }
-        // à´Ô¹¢ÇÒ´éÇÂ D
+        // ï¿½Ô¹ï¿½ï¿½Ò´ï¿½ï¿½ï¿½ D
         else if (Input.GetKey(KeyCode.D))
         {
             moveInput = 1f;
         }
 
-        // ãÊè¤ÇÒÁàÃçÇ¡ÒÃà¤Å×èÍ¹·Õè
-        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¹ï¿½ï¿½ï¿½
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        // ¡ÃÐâ´´ä´éµÅÍ´ (äÁèµÃÇ¨ÊÍº¾×é¹)
+        // ï¿½ï¿½ï¿½â´´ï¿½ï¿½ï¿½Í´ (ï¿½ï¿½ï¿½ï¿½Ç¨ï¿½Íºï¿½ï¿½ï¿½)
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
     }
 
+    void FixedUpdate()
+    {
 
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        anim.SetBool("Ground", grounded);
+
+        anim.SetFloat("vSpeed", rb.linearVelocity.y);
+
+        float move = Input.GetAxis("Horizontal");
+
+        anim.SetFloat("Speed", Mathf.Abs(move));
+
+        rb.linearVelocity = new Vector2(move * maxSpeed, rb.linearVelocity.y);
+    }
 
 
 
@@ -81,7 +100,7 @@ public class CharacterMovement : MonoBehaviour
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb)
         {
-            rb.velocity = Vector2.zero; // ÃÕà«µ¤ÇÒÁàÃçÇà¾×èÍãËéà´é§á¹è¹Í¹
+            rb.linearVelocity = Vector2.zero; // ï¿½ï¿½à«µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¹
             rb.AddForce(direction.normalized * force, ForceMode2D.Impulse);
         }
     }
