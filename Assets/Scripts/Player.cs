@@ -26,8 +26,9 @@ public class CharacterMovement : MonoBehaviour
     void Update()
     {
         float moveInput = 0f;
+
         // Move forward continuously
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        transform.Translate(Vector2.right * moveSpeed * Time.deltaTime);
 
 
         // ���������ǡ������͹���
