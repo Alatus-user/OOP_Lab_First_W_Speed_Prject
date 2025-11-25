@@ -3,13 +3,16 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 5f;             
-    public float rampUpSpeed = 0.2f;         
-    public float maxSpeed = 12f;             
-    private float currentSpeed;              
+    public float moveSpeed = 5f;
+    public float rampUpSpeed = 0.2f;
+    public float maxSpeed = 12f;
+    private float currentSpeed;
+    
+    private Rigidbody2D rb;
+    private Animator anim;
 
     [Header("Jump")]
-    [SerializeField]public float jumpForce = 9f;
+    [SerializeField] public float jumpForce = 9f;
 
     [Header("Player Stats")]
     [field: SerializeField] public int Coin { get; set; } = 0;
@@ -19,58 +22,26 @@ public class CharacterMovement : MonoBehaviour
     [HideInInspector] public int currentHealth;
 
     [Header("Health Drain Over Time")]
-    public float healthDrainRate = 1f;      
-    public float healthDrainInterval = 2f;  
+    public float healthDrainRate = 1f;
+    public float healthDrainInterval = 2f;
     private float healthTimer = 0f;
     public HealthBar healthBar;
 
-    private Rigidbody2D rb;
-    private Animator anim;
-
+    
+    //set ground cheack 
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundRadius = 0.2f;
     public LayerMask whatIsGround;
     public bool grounded = false;
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        currentSpeed = moveSpeed;
-
-        // กำหนด currentHealth = Health
-        currentHealth = Health;
-
-        if (healthBar != null)
-            healthBar.SetMaxHealth(Health, currentHealth);
-    }
-
-    void Update()
-    {
-        UpdateHealthDrain();
-
-        transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
-
-        if (currentSpeed < maxSpeed)
-            currentSpeed += rampUpSpeed * Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space) && grounded)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-        }
-
-    }
-
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
     }
+   
 
-    // -----------------------------------------
     // ชนกับไอเท็มหรือสิ่งกีดขวาง
-    // -----------------------------------------
-     public void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
         // ไอเท็ม เช่น Coin, Hearth
         Item item = other.GetComponent<Item>();
@@ -80,10 +51,9 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
     }
+    
 
-    // -----------------------------------------
     // ฟังก์ชัน player
-    // -----------------------------------------
     public void AddCoin(int value)
     {
         Coin += value;
@@ -114,12 +84,14 @@ public class CharacterMovement : MonoBehaviour
             healthBar.SetHealth(currentHealth);
     }
 
-    public void Knockback(Vector2 direction, float force) 
-    { if (rb) 
-        {   
-            rb.linearVelocity = Vector2.zero; 
-            rb.AddForce(direction * force, ForceMode2D.Impulse); 
-        } 
+    //knock back player after hit 
+    public void Knockback(Vector2 direction, float force)
+    {
+        if (rb)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(direction * force, ForceMode2D.Impulse);
+        }
     }
 
     // -----------------------------------------
@@ -140,5 +112,35 @@ public class CharacterMovement : MonoBehaviour
     public void ResetSpeed()
     {
         currentSpeed = moveSpeed;
+    }
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        currentSpeed = moveSpeed;
+
+        // กำหนด currentHealth = Health
+        currentHealth = Health;
+
+        if (healthBar != null)
+            healthBar.SetMaxHealth(Health, currentHealth);
+    }
+
+
+    void Update()
+    {
+        UpdateHealthDrain();
+
+        transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
+
+        if (currentSpeed < maxSpeed)
+            currentSpeed += rampUpSpeed * Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+
     }
 }
