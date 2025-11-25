@@ -1,50 +1,46 @@
+using System;
 using UnityEngine;
-public enum CoinSize
+
+// ขนาดเหรียญ พร้อมค่าที่จะให้
+[SerializeField] public enum CoinSize
 {
-    Small, //0
-    Medium, //1
-    Large //2
+    Small,
+    Medium,
+    Large
 }
+
 public class Coin : Item
 {
     public CoinSize coinSize { get; private set; }
 
-    public void init(CoinSize size)
+    // เซ็ตค่าเหรียญตามขนาด
+    public void Init(CoinSize size)
     {
-        switch(size)
+        coinSize = size;
+
+        switch (size)
         {
-            case CoinSize.Small:
+            case CoinSize.Small:  // ให้ 1
                 itemValue = 1;
                 break;
-            case CoinSize.Medium:
+
+            case CoinSize.Medium: // ให้ 3
                 itemValue = 3;
                 break;
-            case CoinSize.Large:
+
+            case CoinSize.Large:  // ให้ 5
                 itemValue = 5;
                 break;
         }
     }
 
+    // เมื่อชน player จะเพิ่มเหรียญ
     public override void Use(CharacterMovement player)
     {
+        if (player)
         {
-            if (player)
-            {
-                player.AddCoin(itemValue);
-                Destroy(gameObject);
-            }
+            player.AddCoin(itemValue);
+            Destroy(gameObject); // เก็บแล้วให้หายไป
         }
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

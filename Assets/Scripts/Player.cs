@@ -2,99 +2,143 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float jumpForce = 7f;
-    public float maxSpeed;
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;             
+    public float rampUpSpeed = 0.2f;         
+    public float maxSpeed = 12f;             
+    private float currentSpeed;              
 
-    [field: SerializeField]public int Coin {  get;  set; } = 0;
-    [field: SerializeField]public int Health { get; set; } = 10;
+    [Header("Jump")]
+    [SerializeField]public float jumpForce = 9f;
 
+    [Header("Player Stats")]
+    [field: SerializeField] public int Coin { get; set; } = 0;
+    [field: SerializeField] public int Health { get; set; } = 50;
 
-    Animator anim;
+    // เพิ่ม currentHealth สำหรับ HealthBar
+    [HideInInspector] public int currentHealth;
+
+    [Header("Health Drain Over Time")]
+    public float healthDrainRate = 1f;      
+    public float healthDrainInterval = 2f;  
+    private float healthTimer = 0f;
+    public HealthBar healthBar;
+
     private Rigidbody2D rb;
+    private Animator anim;
 
-    public bool grounded = false;
+    [Header("Ground Check")]
     public Transform groundCheck;
-    float groundRadius = 0.2f;
+    public float groundRadius = 0.2f;
     public LayerMask whatIsGround;
+    public bool grounded = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        currentSpeed = moveSpeed;
+
+        // กำหนด currentHealth = Health
+        currentHealth = Health;
+
+        if (healthBar != null)
+            healthBar.SetMaxHealth(Health, currentHealth);
     }
 
     void Update()
     {
-        float moveInput = 0f;
+        UpdateHealthDrain();
 
-        // Move forward continuously
-        transform.Translate(Vector2.right * moveSpeed * Time.deltaTime);
+        transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
 
+        if (currentSpeed < maxSpeed)
+            currentSpeed += rampUpSpeed * Time.deltaTime;
 
-        // ���������ǡ������͹���
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-
-        // ���ⴴ���ʹ (����Ǩ�ͺ���)
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
+
     }
 
     void FixedUpdate()
     {
-
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-        anim.SetBool("Ground", grounded);
-
-        anim.SetFloat("vSpeed", rb.linearVelocity.y);
-
-        float move = Input.GetAxis("Horizontal");
-
-        anim.SetFloat("Speed", Mathf.Abs(move));
-
-        rb.linearVelocity = new Vector2(move * maxSpeed, rb.linearVelocity.y);
     }
 
-
-
-
-    public void OnTriggerEnter2D(Collider2D other)
+    // -----------------------------------------
+    // ชนกับไอเท็มหรือสิ่งกีดขวาง
+    // -----------------------------------------
+     public void OnTriggerEnter2D(Collider2D other)
     {
+        // ไอเท็ม เช่น Coin, Hearth
         Item item = other.GetComponent<Item>();
-        if(item)
+        if (item)
         {
             item.PickUp(this);
+            return;
         }
     }
 
+    // -----------------------------------------
+    // ฟังก์ชัน player
+    // -----------------------------------------
     public void AddCoin(int value)
     {
         Coin += value;
-        Debug.Log("Coin +1 CurrentCoin: " +  Coin);
+        Debug.Log($"Coin +{value} | Current Coin = {Coin}");
     }
 
     public void Heal(int value)
     {
         Health += value;
-        Debug.Log("Heal + 10 Health  CurrentHealth: "+ Health);
+        if (Health > 100) Health = 100; // สมมติ MaxHealth = 50
 
+        // อัปเดต HealthBar
+        currentHealth = Health;
+        if (healthBar != null)
+            healthBar.SetHealth(currentHealth);
+
+        Debug.Log($"Heal +{value} | Current Health = {currentHealth}");
     }
 
-    public void TakeDamage(int value)
+    public void TakeDamage(int damage)
     {
-        Health -= value;
-        Debug.Log("Heal - 10 Health  CurrentHealth: " + Health);
+        Health -= damage;
+        if (Health < 0) Health = 0;
 
+        // อัปเดต HealthBar
+        currentHealth = Health;
+        if (healthBar != null)
+            healthBar.SetHealth(currentHealth);
     }
 
-    public void Knockback(Vector2 direction, float force)
+    public void Knockback(Vector2 direction, float force) 
+    { if (rb) 
+        {   
+            rb.linearVelocity = Vector2.zero; 
+            rb.AddForce(direction * force, ForceMode2D.Impulse); 
+        } 
+    }
+
+    // -----------------------------------------
+    // ลด HP ตามเวลา
+    // -----------------------------------------
+    private void UpdateHealthDrain()
     {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb)
+        healthTimer += Time.deltaTime;
+
+        if (healthTimer >= healthDrainInterval)
         {
-            rb.linearVelocity = Vector2.zero; // ��૵�������������������͹
-            rb.AddForce(direction.normalized * force, ForceMode2D.Impulse);
+            healthTimer = 0f;
+            TakeDamage((int)healthDrainRate);
+            Debug.Log($"Health Drain -{healthDrainRate} | Current Health = {currentHealth}");
         }
+    }
+
+    public void ResetSpeed()
+    {
+        currentSpeed = moveSpeed;
     }
 }

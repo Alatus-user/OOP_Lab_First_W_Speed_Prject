@@ -1,33 +1,28 @@
 using UnityEngine;
 
-public class Spike : Item
+public class Spike : MonoBehaviour
 {
-    public override void Use(CharacterMovement player)
+    [SerializeField] public int damage = 1;
+    [SerializeField] private float knockbackForce = 10f;
+
+    void OnCollisionEnter2D(Collision2D other)
     {
+        CharacterMovement player = other.gameObject.GetComponent<CharacterMovement>();
+
         if (player)
         {
-            // ∑”¥“‡¡®
-            player.TakeDamage(ItemValue);
+            Debug.Log("Player hit Spike!");
 
-            // §”π«≥∑‘»„ÀÈ°√–‡¥ÈßÕÕ°®“°Àπ“¡
-            Vector2 knockDir = (player.transform.position - transform.position).normalized;
+            // ‡∏•‡∏î HP
+            player.TakeDamage(damage);
 
-            // ‡√’¬° knockback
-            player.Knockback(knockDir, 10f); 
+            // reset speed
+            player.ResetSpeed();
+
+            // ‡πÄ‡∏î‡πâ‡∏á‡πÑ‡∏õ‡∏ó‡∏≤‡∏á‡∏ã‡πâ‡∏≤‡∏¢‡πÄ‡∏™‡∏°‡∏≠
+            Vector2 dir = Vector2.left;
+
+            player.Knockback(dir, knockbackForce);
         }
-    }
-
-   
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
