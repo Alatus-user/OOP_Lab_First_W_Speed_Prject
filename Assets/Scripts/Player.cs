@@ -94,9 +94,8 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    // -----------------------------------------
+    
     // ลด HP ตามเวลา
-    // -----------------------------------------
     private void UpdateHealthDrain()
     {
         healthTimer += Time.deltaTime;
