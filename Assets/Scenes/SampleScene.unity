@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6b401413eb6c14da95939c9bb11cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreText: {fileID: 111502752}
   restartButton: {fileID: 1539295570}
   exitButton: {fileID: 1076028168}
 --- !u!1 &111502750
@@ -296,7 +297,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '123
+  m_text: '0
 
 '
   m_isRightToLeft: 0

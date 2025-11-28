@@ -1,21 +1,32 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
-public class UI_Scipt : MonoBehaviour
+public class UI : MonoBehaviour
 {
+    public static UI instance;
+
+    [SerializeField] private TextMeshProUGUI scoreText;
+
     [SerializeField] private GameObject restartButton;
     [SerializeField] private GameObject exitButton;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private int scoreValue;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        scoreText.text = scoreValue.ToString("#,#");
     }
 
     public void OpenScene()
@@ -39,5 +50,12 @@ public class UI_Scipt : MonoBehaviour
 #endif
         Application.Quit();
     }
+
+    public void AddScore(int coinValue)
+    {
+        scoreValue += coinValue;
+        scoreText.text = scoreValue.ToString("#,#");
+    }
+    
 
 }

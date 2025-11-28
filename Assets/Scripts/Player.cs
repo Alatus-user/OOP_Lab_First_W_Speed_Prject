@@ -58,6 +58,7 @@ public class CharacterMovement : MonoBehaviour
     {
         Coin += value;
         Debug.Log($"Coin +{value} | Current Coin = {Coin}");
+        UI.instance.AddScore(value);
     }
 
     public void Heal(int value)
