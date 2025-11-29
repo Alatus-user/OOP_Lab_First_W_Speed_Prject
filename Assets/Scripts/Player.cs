@@ -41,13 +41,20 @@ public class CharacterMovement : MonoBehaviour
    
 
     // ชนกับไอเท็มหรือสิ่งกีดขวาง
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         // ไอเท็ม เช่น Coin, Hearth
-        Item item = other.GetComponent<Item>();
+        Item item = collision.GetComponent<Item>();
         if (item)
         {
             item.PickUp(this);
+            return;
+        }
+
+        //When player fall from map
+        if (collision.gameObject.tag == "Dead Zone") 
+        {
+            Health = 0;
             return;
         }
     }
@@ -131,7 +138,7 @@ public class CharacterMovement : MonoBehaviour
     void Update()
     {
         UpdateHealthDrain();
-
+        IsDead();
         transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
 
         if (currentSpeed < maxSpeed)
@@ -150,6 +157,8 @@ public class CharacterMovement : MonoBehaviour
         if (Health <= 0)
         {
             UI.instance.OpenScene();
+            currentSpeed = 0f;
         }
+
     }
 }

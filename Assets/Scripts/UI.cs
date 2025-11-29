@@ -31,7 +31,6 @@ public class UI : MonoBehaviour
 
     public void OpenScene()
     {
-        Time.timeScale = 0;
         restartButton.SetActive(true);
         exitButton.SetActive(true);
     }
