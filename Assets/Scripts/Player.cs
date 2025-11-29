@@ -34,6 +34,20 @@ public class CharacterMovement : MonoBehaviour
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
+
+        if (currentSpeed < maxSpeed)
+            currentSpeed += rampUpSpeed * Time.deltaTime;
+
+        
+
+        // ========== RUN ANIMATION ==========
+        if (grounded && currentState != PlayerState.Hurt)
+        {
+            ChangeState(PlayerState.Run);
+        }
+        IsDead();
+
     }
 
     // เสียง
@@ -167,13 +181,6 @@ public class CharacterMovement : MonoBehaviour
     void Update()
     {
         UpdateHealthDrain();
-        IsDead();
-
-        transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
-
-        if (currentSpeed < maxSpeed)
-            currentSpeed += rampUpSpeed * Time.deltaTime;
-
         // ========== JUMP ==========
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
@@ -182,13 +189,9 @@ public class CharacterMovement : MonoBehaviour
 
             ChangeState(PlayerState.Jump);
         }
-
-        // ========== RUN ANIMATION ==========
-        if (grounded && currentState != PlayerState.Hurt)
-        {
-            ChangeState(PlayerState.Run);
-        }
     }
+
+    
 
     public void IsDead()
     {
@@ -196,7 +199,7 @@ public class CharacterMovement : MonoBehaviour
         {
             audioSource.PlayOneShot(GameoverSound, 0.2f);
             UI.instance.OpenScene();
-            currentSpeed = 0f;
+            moveSpeed = 0;
             
             anim.Play("Die_Animation");
         }

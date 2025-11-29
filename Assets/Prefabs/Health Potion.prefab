@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af3909a9151ca7438d29633a2e982c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemValue>k__BackingField: 0
+  <itemValue>k__BackingField: 25
   pickupSound: {fileID: 8300000, guid: 55f5721567966394c9bf9f830f61b3b9, type: 3}
   potionSize: 0
 --- !u!82 &-5823233861711175802
