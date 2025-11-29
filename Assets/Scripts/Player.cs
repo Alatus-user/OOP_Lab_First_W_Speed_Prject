@@ -143,4 +143,13 @@ public class CharacterMovement : MonoBehaviour
         }
 
     }
+
+    //when player has no hp left
+    public void IsDead()
+    {
+        if (Health <= 0)
+        {
+            UI.instance.OpenScene();
+        }
+    }
 }
