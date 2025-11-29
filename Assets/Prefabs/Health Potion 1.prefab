@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7095405891008505105}
   - component: {fileID: -5823233861711175802}
   m_Layer: 0
-  m_Name: Health Potion
+  m_Name: Health Potion 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1637636545622152526, guid: 2786097d201a9b1419372dc261590630, type: 3}
+  m_Sprite: {fileID: -940873243878117561, guid: 93fe43bbcd6e23947a074ff43f7419e0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <itemValue>k__BackingField: 0
   pickupSound: {fileID: 8300000, guid: 55f5721567966394c9bf9f830f61b3b9, type: 3}
-  potionSize: 0
+  potionSize: 1
 --- !u!82 &-5823233861711175802
 AudioSource:
   m_ObjectHideFlags: 0

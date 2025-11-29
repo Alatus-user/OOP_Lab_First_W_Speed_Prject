@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8879637474945331568
+--- !u!1 &4376671879081539749
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5883010368470338046}
-  - component: {fileID: 1977981003950954065}
-  - component: {fileID: 4364475379736365038}
-  - component: {fileID: 7095405891008505105}
-  - component: {fileID: -5823233861711175802}
+  - component: {fileID: 7012513950132694063}
+  - component: {fileID: 8122142244422874741}
+  - component: {fileID: 8402910727961208929}
+  - component: {fileID: 1631124729658867891}
+  - component: {fileID: 884948836405282060}
   m_Layer: 0
-  m_Name: Health Potion
+  m_Name: Coin 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5883010368470338046
+--- !u!4 &7012513950132694063
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8879637474945331568}
+  m_GameObject: {fileID: 4376671879081539749}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.24, y: 1.36, z: 0}
+  m_LocalPosition: {x: -2.12, y: -2.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1977981003950954065
+--- !u!212 &8122142244422874741
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8879637474945331568}
+  m_GameObject: {fileID: 4376671879081539749}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -79,24 +79,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1637636545622152526, guid: 2786097d201a9b1419372dc261590630, type: 3}
+  m_Sprite: {fileID: -4025743065406592359, guid: 3efdf37d99b109747a7122d6121e2539, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.5}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &4364475379736365038
-PolygonCollider2D:
+--- !u!58 &8402910727961208929
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8879637474945331568}
+  m_GameObject: {fileID: 4376671879081539749}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -125,51 +125,35 @@ PolygonCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.75, y: 0.9375}
-    newSize: {x: 1, y: 0.5}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0, y: 0.25}
-      - {x: -0.5, y: 0}
-      - {x: 0, y: -0.25}
-      - {x: 0.5, y: 0}
-  m_UseDelaunayMesh: 0
---- !u!114 &7095405891008505105
+  m_Radius: 0.5
+--- !u!114 &1631124729658867891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8879637474945331568}
+  m_GameObject: {fileID: 4376671879081539749}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5af3909a9151ca7438d29633a2e982c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 240027e94bf81c741ab836a596caf147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemValue>k__BackingField: 0
-  pickupSound: {fileID: 8300000, guid: 55f5721567966394c9bf9f830f61b3b9, type: 3}
-  potionSize: 0
---- !u!82 &-5823233861711175802
+  <itemValue>k__BackingField: 3
+  pickupSound: {fileID: 8300000, guid: 79a8c7aa3d0e1034a981ece616340b50, type: 3}
+--- !u!82 &884948836405282060
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8879637474945331568}
+  m_GameObject: {fileID: 4376671879081539749}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 55f5721567966394c9bf9f830f61b3b9, type: 3}
+  m_Resource: {fileID: 8300000, guid: 79a8c7aa3d0e1034a981ece616340b50, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

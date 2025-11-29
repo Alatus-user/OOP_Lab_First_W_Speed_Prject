@@ -18,7 +18,6 @@ public class CharacterMovement : MonoBehaviour
     [field: SerializeField] public int Coin { get; set; } = 0;
     [field: SerializeField] public int Health { get; set; } = 50;
 
-    // เพิ่ม currentHealth สำหรับ HealthBar
     [HideInInspector] public int currentHealth;
 
     [Header("Health Drain Over Time")]
@@ -27,8 +26,6 @@ public class CharacterMovement : MonoBehaviour
     private float healthTimer = 0f;
     public HealthBar healthBar;
 
-    
-    //set ground cheack 
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundRadius = 0.2f;
@@ -38,12 +35,51 @@ public class CharacterMovement : MonoBehaviour
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
     }
-   
 
-    // ชนกับไอเท็มหรือสิ่งกีดขวาง
+    // เสียง
+    public AudioClip jumpSound;
+    public AudioClip GameoverSound;
+    private AudioSource audioSource;
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    // ========== NEW: Animation State ==========
+    private enum PlayerState { Run, Jump, Hurt, Idle, Die }
+    private PlayerState currentState = PlayerState.Run;
+
+    private void ChangeState(PlayerState newState)
+    {
+        if (currentState == newState) return;
+        currentState = newState;
+
+        switch (newState)
+        {
+            case PlayerState.Run:
+                anim.Play("Run_Animation");
+                break;
+
+            case PlayerState.Jump:
+                anim.Play("Jump_Animation");
+                break;
+
+            case PlayerState.Hurt:
+                anim.Play("Hurt_Animation");
+                break;
+
+            case PlayerState.Idle:
+                anim.Play("Run_Animation");
+                break;
+            case PlayerState.Die:
+                anim.Play("Die_Animation");
+                break;
+        }
+    }
+    // ===========================================
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        // ไอเท็ม เช่น Coin, Hearth
         Item item = collision.GetComponent<Item>();
         if (item)
         {
@@ -51,16 +87,13 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
-        //When player fall from map
         if (collision.gameObject.tag == "Dead Zone") 
         {
             Health = 0;
             return;
         }
     }
-    
 
-    // ฟังก์ชัน player
     public void AddCoin(int value)
     {
         Coin += value;
@@ -71,9 +104,8 @@ public class CharacterMovement : MonoBehaviour
     public void Heal(int value)
     {
         Health += value;
-        if (Health > 100) Health = 100; // สมมติ MaxHealth = 50
+        if (Health > 100) Health = 100;
 
-        // อัปเดต HealthBar
         currentHealth = Health;
         if (healthBar != null)
             healthBar.SetHealth(currentHealth);
@@ -85,14 +117,15 @@ public class CharacterMovement : MonoBehaviour
     {
         Health -= damage;
         if (Health < 0) Health = 0;
-
-        // อัปเดต HealthBar
+        ChangeState(PlayerState.Hurt);
         currentHealth = Health;
         if (healthBar != null)
             healthBar.SetHealth(currentHealth);
+
+        // ========== PLAY HURT ANIMATION ==========
+        
     }
 
-    //knock back player after hit 
     public void Knockback(Vector2 direction, float force)
     {
         if (rb)
@@ -102,8 +135,6 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    
-    // ลด HP ตามเวลา
     private void UpdateHealthDrain()
     {
         healthTimer += Time.deltaTime;
@@ -111,7 +142,7 @@ public class CharacterMovement : MonoBehaviour
         if (healthTimer >= healthDrainInterval)
         {
             healthTimer = 0f;
-            TakeDamage((int)healthDrainRate);
+            Health -= (int)healthDrainRate;
             Debug.Log($"Health Drain -{healthDrainRate} | Current Health = {currentHealth}");
         }
     }
@@ -127,38 +158,47 @@ public class CharacterMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         currentSpeed = moveSpeed;
 
-        // กำหนด currentHealth = Health
         currentHealth = Health;
 
         if (healthBar != null)
             healthBar.SetMaxHealth(Health, currentHealth);
     }
 
-
     void Update()
     {
         UpdateHealthDrain();
         IsDead();
+
         transform.Translate(Vector2.right * currentSpeed * Time.deltaTime);
 
         if (currentSpeed < maxSpeed)
             currentSpeed += rampUpSpeed * Time.deltaTime;
 
+        // ========== JUMP ==========
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
+            audioSource.PlayOneShot(jumpSound, 0.5f);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            ChangeState(PlayerState.Jump);
         }
 
+        // ========== RUN ANIMATION ==========
+        if (grounded && currentState != PlayerState.Hurt)
+        {
+            ChangeState(PlayerState.Run);
+        }
     }
 
-    //when player has no hp left
     public void IsDead()
     {
         if (Health <= 0)
         {
+            audioSource.PlayOneShot(GameoverSound, 0.2f);
             UI.instance.OpenScene();
             currentSpeed = 0f;
+            
+            anim.Play("Die_Animation");
         }
-
     }
 }

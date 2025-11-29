@@ -9,9 +9,21 @@ using UnityEngine;
     Large
 }
 
+
 public class Coin : Item
 {
     public CoinSize coinSize { get; private set; }
+
+
+
+    //เล่นเสียงเก็บเหรียญ
+    public AudioClip pickupSound;
+    private AudioSource audioSource;
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+    
 
     // เซ็ตค่าเหรียญตามขนาด
     public void Init(CoinSize size)
@@ -40,6 +52,8 @@ public class Coin : Item
         if (player)
         {
             player.AddCoin(itemValue);
+            if (pickupSound && audioSource)
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
             Destroy(gameObject); // เก็บแล้วให้หายไป
         }
     }
