@@ -6492,6 +6492,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   grounded: 0
+  isDead: 0
   jumpSound: {fileID: 8300000, guid: 28b2d17d65602ea4dab87f580d95cb9b, type: 3}
   GameoverSound: {fileID: 8300000, guid: a44bca09227542248b86509a434b8e78, type: 3}
 --- !u!50 &1013134102
@@ -7125,7 +7126,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 741232727
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1147921849

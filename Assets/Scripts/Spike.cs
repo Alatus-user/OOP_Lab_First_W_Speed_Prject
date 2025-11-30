@@ -24,7 +24,7 @@ public class Spike : MonoBehaviour
 
             // ลด HP
             player.TakeDamage(damage);
-
+            
             // reset speed
             player.ResetSpeed();
 

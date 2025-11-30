@@ -28,11 +28,11 @@ public class Hearth : Item
         switch (size)
         {
             case PotionSize.Small: 
-                itemValue = 10; //heal 10 point
+                itemValue = 25; 
                 break;
 
             case PotionSize .Big:
-                itemValue = 25; //heal 25 point
+                itemValue = 50;
                 break;
         }
     }

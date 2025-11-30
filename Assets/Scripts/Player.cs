@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
@@ -31,6 +32,7 @@ public class CharacterMovement : MonoBehaviour
     public float groundRadius = 0.2f;
     public LayerMask whatIsGround;
     public bool grounded = false;
+    public bool isDead = false;
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
@@ -131,7 +133,6 @@ public class CharacterMovement : MonoBehaviour
     {
         Health -= damage;
         if (Health < 0) Health = 0;
-        ChangeState(PlayerState.Hurt);
         currentHealth = Health;
         if (healthBar != null)
             healthBar.SetHealth(currentHealth);
@@ -144,6 +145,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if (rb)
         {
+            ChangeState(PlayerState.Hurt);
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * force, ForceMode2D.Impulse);
         }
@@ -156,7 +158,7 @@ public class CharacterMovement : MonoBehaviour
         if (healthTimer >= healthDrainInterval)
         {
             healthTimer = 0f;
-            Health -= (int)healthDrainRate;
+            TakeDamage((int)healthDrainRate);
             Debug.Log($"Health Drain -{healthDrainRate} | Current Health = {currentHealth}");
         }
     }
@@ -195,13 +197,27 @@ public class CharacterMovement : MonoBehaviour
 
     public void IsDead()
     {
-        if (Health <= 0)
+        if (currentHealth <= 0 && !isDead)
         {
-            audioSource.PlayOneShot(GameoverSound, 0.2f);
-            UI.instance.OpenScene();
-            moveSpeed = 0;
-            
-            anim.Play("Die_Animation");
+        isDead = true; // ป้องกันไม่ให้เรียกซ้ำ
+
+        audioSource.PlayOneShot(GameoverSound, 0.2f);
+        UI.instance.OpenScene();
+
+        moveSpeed = 0;
+        anim.Play("Die_Animation");
+
+        StartCoroutine(DelayDestroy());
+
         }
     }
+
+    private IEnumerator DelayDestroy()
+{
+    yield return new WaitForSeconds(2f);
+    Destroy(gameObject);
+}
+
+
+
 }

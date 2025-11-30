@@ -12,7 +12,9 @@ public class DeadZone : MonoBehaviour
 
         if (collision.tag == "Target" || collision.tag == "Dino")
         {
-            player.Health = 0;
+            player.isDead = true;
+            player.moveSpeed = 0;
+           
 
             UI.instance.OpenScene(); //this will open restart scene
         }

@@ -11,7 +11,8 @@ public class CameraFollow : MonoBehaviour
     void LateUpdate()
     {
         if (target == null) return;
-
+        Debug.LogWarning("CameraFollow: No target assigned for the camera to follow.");
+            
         Vector3 desiredPos = new Vector3(target.position.x + xOffset,target.position.y + yOffset,transform.position.z);
 
         
@@ -20,5 +21,7 @@ public class CameraFollow : MonoBehaviour
 
         
         transform.position = Vector3.Lerp(transform.position, desiredPos, smoothSpeed * Time.deltaTime);
+
+        
     }
 }
